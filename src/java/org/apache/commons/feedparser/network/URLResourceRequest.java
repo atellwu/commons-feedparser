@@ -19,6 +19,7 @@ package org.apache.commons.feedparser.network;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -26,8 +27,6 @@ import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.log4j.Logger;
-
-import sun.net.www.protocol.http.HttpURLConnection;
 
 /**
  * ResourceRequest implementation that uses java.net.URL as the backend.
@@ -158,11 +157,10 @@ public class URLResourceRequest extends BaseResourceRequest implements ResourceR
             
         } 
 
-        if ( _urlConnection instanceof HttpURLConnection ) {
+        if ( _url.getProtocol().equalsIgnoreCase("http") ) {
 
             HttpURLConnection httpURLConn = (HttpURLConnection)_urlConnection;
 
-            httpURLConn.setFollowRedirects( getFollowRedirects() );
             httpURLConn.setInstanceFollowRedirects( getFollowRedirects() );
 
             if ( this.getIfModifiedSince() != -1 )
